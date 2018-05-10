@@ -1,0 +1,13 @@
+{
+  "name": "georadiant",
+  "version": "1.0.0",
+  "description": "Geolocator for Radiant colors ink. Shows ink dealers and artists on an adjustable radius google map",
+  "main": "geo.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Julian Escobar",
+  "license": "ISC"
+}
