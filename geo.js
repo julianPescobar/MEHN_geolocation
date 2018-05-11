@@ -9,11 +9,8 @@ var app = express()
 // Conectamos con database mongodb
 mongo.connect(url, function (err, client) {
   assert.equal(null, err)
-  console.log('conexion exitosa con mongodb')
+
   var db = client.db(geodb)
-  buscar(db, function () {
-    client.close()
-  })
 })
 // -------------------------------
 
@@ -54,11 +51,13 @@ app.use(express.static('public'))
 
 // Handleamos el acceso a localhost:3000/
 app.get('/', function (req, res) {
+  // nos conectamos a la base
   mongo.connect(url, function (err, client) {
     assert.equal(null, err)
     console.log('conexion exitosa con mongodb')
     var db = client.db(geodb)
     var coll = db.collection('markers')
+    //buscamos en markers
     coll.find({}).toArray(function (err,docs){
       assert.equal(err,null)
 console.log(docs)

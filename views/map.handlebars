@@ -9,26 +9,23 @@
      long = location.coords.longitude;
      var mymap = L.map('mapid').setView([lat,long], 5);
          L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-            minZoom: 2,
+            minZoom: 3,
            maxZoom: 18,
            id: 'mapbox.streets'
          }).addTo(mymap);
-
-
   {{#each markers}}
+  var myIcon = L.icon({
+ iconUrl: '{{{icono}}}',
+ iconSize: [32, 32],
+ iconAnchor: [32, 32],
+ popupAnchor: [-16, -32]});
+L.marker([{{{lat}}},{{{lng}}}], {title: '{{{tipomarker}}}', icon: myIcon}).bindPopup("<div align='middle'><b>{{{tipomarker}}}</b><br>{{{nombre}}}<br><b>Direccion:</b>{{{direccion}}}<br><b>Telefono:</b>{{{telefono}}}</div>").addTo(mymap);
+  {{/each}}
 
-alert({{@key}} {{@../nombre}})
 
-{{/each}}
-
-         L.marker([lat,long]).bindPopup("You are here").addTo(mymap).openPopup();
          /*
          for(i = 0; i < 9;i++){
-           var myIcon = L.icon({
-    iconUrl: 'images/'+i+'.jpg',
-    iconSize: [32, 32],
-    iconAnchor: [32, 32],
-    popupAnchor: [-16, -32],
+
 
 });
             L.marker([lat+(i+1)/100,long-(i+1)/50],{title: 'Marcador '+i, icon: myIcon}).bindPopup("<div align='middle'><img src='images/"+i+".jpg' height=64 width=64 </img></div><div><b>Este es el marcador N°:"+(i+1)+"</b><br>Julian</div>").addTo(mymap)
