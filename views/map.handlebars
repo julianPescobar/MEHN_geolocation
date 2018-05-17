@@ -2,9 +2,13 @@
 @font-face { font-family: 'SuperGroteskA-Bd'; src: url('/supergroteska-bd.TTF'); }
 </style>
 <div>
-<h1 align="middle" style="font-family: 'SuperGroteskA-Bd';font-size:1.8em;">OUR&nbsp;{{{markers.length}}}&nbsp;AUTHORIZED RADIANT COLORS &copy; DEALERS</h1>
+<h1 align="middle" style="font-family: 'SuperGroteskA-Bd';font-size:1.8em;">{{{__ "our"}}}&nbsp;{{{markers.length}}}&nbsp;{{{__ "auth"}}}</h1>
 </div>
 <div id="mapid" style="border-radius: 25px;width: 100%; height: 70vh; margin: 0; position: block;"></div>
+
+<link rel="stylesheet" href="leaflet-search.css" />
+<link rel="stylesheet" href="leaflet-search.mobile.css" />
+<script src="leaflet-search.js"></script>
 <script>
 var yo;
 if (navigator.geolocation) {
@@ -15,42 +19,45 @@ if (navigator.geolocation) {
      maxBounds:[ [-90, -160], [90, 200] ],
      minZoom: 2
    }).setView([lat,long], 4);
-    yo = L.marker([lat,long]).bindPopup("You are here.");
+    yo = L.marker([lat,long]).bindPopup("{{{__ "here"}}}");
    yo.addTo(mymap).openPopup();
 displaydealers()
-},showError)}
+},showError,{ maximumAge:600000, timeout:5000, enableHighAccuracy: true })}
 
 function showError(error) {
   switch(error.code) {
     case error.PERMISSION_DENIED:
-    err =  "User denied the request for Geolocation."
+    err =  "{{{__ "deny"}}}"
       break;
     case error.POSITION_UNAVAILABLE:
-      err =  "Location information is unavailable."
+      err = "{{{__ "loca"}}}"
       break;
     case error.TIMEOUT:
-    err =  "The request to get user location timed out."
+    err = "{{{__ "tout"}}}"
       break;
     case error.UNKNOWN_ERROR:
-      err =  "An unknown error occurred."
+      err =   "{{{__ "unkn"}}}"
       break;
   }
    mymap = L.map('mapid',{
      maxBounds:[ [-90, -160], [90, 200] ],
      minZoom: 2
    }).setView([0,0], 2);
-    yo =  L.marker([0,0]).bindPopup("Error while trying to get your location. "+err+". To solve this error, please enable your Geolocation and refresh the page.")
+    yo =  L.marker([0,0]).bindPopup("{{{__ "errl"}}}"+err+"{{{__ "turnon"}}}")
    yo.addTo(mymap).openPopup();
    displaydealers();
 }
 
 function displaydealers()
 {
+
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
      minZoom: 2,
     maxZoom: 17,
     id: 'mapbox.streets'
   }).addTo(mymap);
+
+//searchLayer is a L.LayerGroup contains searched markers
   var myIcon = L.icon({
   iconUrl: 'images/rad.png',
   iconSize: [40, 50],
@@ -64,10 +71,24 @@ function displaydealers()
  }
 }
 var milatlong = yo.getLatLng();
+var dire = "{{{__ "addrex"}}}"
+var tele = "{{{__ "phone"}}}"
+var web = "{{{__ "web"}}}"
+var estas = "{{{__ "youre"}}}"
+var axkm = "{{{__ "away"}}}"
+var markersLayer = new L.LayerGroup();
+mymap.addLayer(markersLayer);
+var marker = null;
   {{#each markers}}
+  marker = L.marker([{{{lat}}},{{{long}}}], {title: "{{{nombredealer}}}", icon: myIcon}).bindPopup("<div align='middle'><h2>{{{nombredealer}}}</h2>{{{pais}}}<br>{{#if direccion}}<b>"+dire+"</b>{{{direccion}}}<br>{{/if}}{{#if telefono}}<b>"+tele+"</b>{{{telefono}}}{{/if}}{{#if pagweb}}<br><a target='_blank' href='{{{pagweb}}}'>"+web+"</a>{{/if}}{{#if email}}<br><b><a href=mailto:{{{email}}}>Email</a></b>{{/if}}<br><b>"+estas+milatlong.distanceTo([{{{lat}}},{{{long}}}]).toFixed(0)/1000+axkm+"</b></div>");
+  marker.addTo(mymap);
+  markersLayer.addLayer(marker);
 
-
-  L.marker([{{{lat}}},{{{long}}}], {title: "{{{nombredealer}}}", icon: myIcon}).bindPopup("<div align='middle'><div align='middle'></div><b style='font-size: 2em;'>{{{nombredealer}}}</b><br>{{{pais}}}<br>{{#if direccion}}<b>Address: </b>{{{direccion}}}<br>{{/if}}{{#if telefono}}<b>Phone: </b>{{{telefono}}}{{/if}}{{#if pagweb}}<br><a target='_blank' href='{{{pagweb}}}'>Website</a>{{/if}}{{#if email}}<br><b><a href=mailto:{{{email}}}>Email</a></b>{{/if}}<br><b>You are "+milatlong.distanceTo([{{{lat}}},{{{long}}}]).toFixed(0)/1000+" kilometers away from here</b></div>").addTo(mymap);
   {{/each}}
+  var searchControl = new L.Control.Search({layer: markersLayer, autoCollapse: true, position: 'topleft', initial: false, zoom: 10, textPlaceholder: '{{{__ "srch"}}}', textErr: '{{{__ "notfound"}}}'}).on('search:locationfound', function(e) {e.layer.openPopup();});
+  searchControl.addTo(mymap);
 }
+
+
+
 </script>

@@ -1,14 +1,22 @@
 var express = require('express')
 var exphbs = require('express-handlebars')
+var hbs = require('handlebars')
 var mongo = require('mongodb').MongoClient
 var assert = require('assert')
 var url = 'mongodb://localhost/'
 var geodb = 'geodb'
 var app = express()
+var i18n = require('i18n')
 const https = require('https')
 const fs = require('fs')
 const port = 3000
-
+i18n.configure({
+    locales:['en', 'es'],
+    directory: __dirname + '/locales',
+    cookie: 'locale',
+    defaultLocale: 'en'
+})
+app.use(i18n.init)
 // Conectamos con database mongodb
 mongo.connect(url, function (err, client) {
   assert.equal(null, err)
@@ -47,6 +55,15 @@ const buscar = function (db, callback) {
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
 app.use(express.static('public'))
+
+// register hbs helpers in res.locals' context which provides this.locale
+hbs.registerHelper('__', function () {
+  return i18n.__.apply(this, arguments);
+});
+hbs.registerHelper('__n', function () {
+  return i18n.__n.apply(this, arguments);
+});
+
 // ------------------------------------------
 // Handleamos el acceso a localhost:3000/
 app.get('/', function (req, res) {
@@ -66,6 +83,7 @@ app.get('/', function (req, res) {
     })
   })
 })
+
 // -----------------------------------------
 
 // Abrimos el puerto 3000 para que arranque la app
@@ -75,6 +93,4 @@ const httpsOptions = {
   key: fs.readFileSync('public/key-20180514-102809.pem'),
   cert: fs.readFileSync('public/cert-20180514-102809.crt')
 }
-const server = https.createServer(httpsOptions, app).listen(port, () => {
-  console.log('server running at ' + port)
-})
+const server = https.createServer(httpsOptions, app).listen(port)

@@ -1,0 +1,19 @@
+{
+	"our": "OUR",
+	"auth": "AUTHORIZED RADIANT COLORS &copy; DEALERS",
+	"deny": "User denied the request for Geolocation",
+	"loca": "Location information is unavailable",
+	"tout": "The request to get user location timed out.",
+	"unkn": "An unknown error occurred.",
+	"errl": "Error while trying to get your location. ",
+	"turnon": ". To solve this error, please enable your Geolocation and refresh the page.",
+	"addrex": "Address: ",
+	"phone": "Phone: ",
+	"web": "Website",
+	"youre": "You are ",
+	"away": " kilometers away from here",
+	"here": "You are here.",
+	"srch": "Search a Radiant Dealer",
+	"cncl": "Cancel Search",
+	"notfound": "Dealer was not found"
+}

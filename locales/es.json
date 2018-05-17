@@ -1,0 +1,19 @@
+{
+	"our": "NUESTROS ",
+	"auth": "DISTRIBUIDORES RADIANT &copy; OFICIALES",
+	"deny": "El usuario negó la peticion para geolocalizarse. ",
+	"loca": "Información de la ubicación no estuvo disponible. ",
+	"tout": "La petición para saber tu ubicación caducó. ",
+	"unkn": "Un error desconocido acaba de ocurrir. ",
+	"errl": "Hubo un error al querer ubicarte. ",
+	"turnon": ". Para solucionar este error, por favor habilite la geolocalización y refresque la pagina.",
+	"addrex": "Direccion: ",
+	"phone": "Telefono: ",
+	"web": "Sitio Web",
+	"youre": "Estás a ",
+	"away": " kilómetros de este lugar",
+	"here": "Usted está aquí",
+	"srch": "Buscar un distribuidor Radiant",
+	"cncl": "Cancelar Busqueda",
+	"notfound": "Distribuidor no encontrado"
+}
